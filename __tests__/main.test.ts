@@ -8,82 +8,81 @@
 
 import * as core from '@actions/core'
 import * as main from '../src/main'
+import * as op from '@1password/sdk'
 
 // Mock the action's main function
 const runMock = jest.spyOn(main, 'run')
 
-// Other utilities
-const timeRegex = /^\d{2}:\d{2}:\d{2}/
-
 // Mock the GitHub Actions core library
-let debugMock: jest.SpiedFunction<typeof core.debug>
 let errorMock: jest.SpiedFunction<typeof core.error>
-let getInputMock: jest.SpiedFunction<typeof core.getInput>
-let setFailedMock: jest.SpiedFunction<typeof core.setFailed>
-let setOutputMock: jest.SpiedFunction<typeof core.setOutput>
+let infoMock: jest.SpiedFunction<typeof core.info>
+let outputMock: jest.SpiedFunction<typeof core.setOutput>
+let getInputMock: jest.SpiedFunction<typeof core.getBooleanInput>
+let setEnvMock: jest.SpiedFunction<typeof core.exportVariable>
+let opMock: jest.SpiedFunction<typeof op.createClient>
 
 describe('action', () => {
+  const OLD_ENV = process.env
+
   beforeEach(() => {
     jest.clearAllMocks()
 
-    debugMock = jest.spyOn(core, 'debug').mockImplementation()
+    infoMock = jest.spyOn(core, 'info').mockImplementation()
     errorMock = jest.spyOn(core, 'error').mockImplementation()
-    getInputMock = jest.spyOn(core, 'getInput').mockImplementation()
-    setFailedMock = jest.spyOn(core, 'setFailed').mockImplementation()
-    setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
+    outputMock = jest.spyOn(core, 'setOutput').mockImplementation()
+    getInputMock = jest.spyOn(core, 'getBooleanInput').mockImplementation()
+    jest.spyOn(core, 'setFailed').mockImplementation()
+    setEnvMock = jest.spyOn(core, 'exportVariable').mockImplementation()
+    opMock = jest.spyOn(op, 'createClient').mockResolvedValue({
+      secrets: {
+        resolve: jest.fn().mockResolvedValue('test-secret')
+      },
+      items: {
+        get: jest.fn().mockImplementation(),
+        create: jest.fn().mockImplementation(),
+        put: jest.fn().mockImplementation(),
+        delete: jest.fn().mockImplementation(),
+        listAll: jest.fn().mockImplementation()
+      },
+      vaults: {
+        listAll: jest.fn().mockImplementation()
+      }
+    })
+  })
+
+  afterAll(() => {
+    process.env = OLD_ENV // Restore old environment
   })
 
   it('sets the time output', async () => {
+    process.env = {
+      OP_SERVICE_ACCOUNT_TOKEN: 'test-token',
+      OP_MANAGED_VARIABLES: 'test-key',
+      test: 'op://test/test-key'
+    }
+
     // Set the action's inputs as return values from core.getInput()
     getInputMock.mockImplementation(name => {
       switch (name) {
-        case 'milliseconds':
-          return '500'
+        case 'unset-previous':
+          return true
+        case 'export-env':
+          return false
         default:
-          return ''
+          return false
       }
     })
 
     await main.run()
     expect(runMock).toHaveReturned()
-
-    // Verify that all of the core library functions were called correctly
-    expect(debugMock).toHaveBeenNthCalledWith(1, 'Waiting 500 milliseconds ...')
-    expect(debugMock).toHaveBeenNthCalledWith(
-      2,
-      expect.stringMatching(timeRegex)
-    )
-    expect(debugMock).toHaveBeenNthCalledWith(
-      3,
-      expect.stringMatching(timeRegex)
-    )
-    expect(setOutputMock).toHaveBeenNthCalledWith(
-      1,
-      'time',
-      expect.stringMatching(timeRegex)
-    )
+    expect(opMock).toHaveReturned()
     expect(errorMock).not.toHaveBeenCalled()
-  })
 
-  it('sets a failed status', async () => {
-    // Set the action's inputs as return values from core.getInput()
-    getInputMock.mockImplementation(name => {
-      switch (name) {
-        case 'milliseconds':
-          return 'this is not a number'
-        default:
-          return ''
-      }
-    })
+    // Verify that all the core library functions were called correctly
+    expect(infoMock).toHaveBeenNthCalledWith(1, 'Unsetting previous values ...')
+    expect(infoMock).toHaveBeenNthCalledWith(2, 'Unsetting test-key')
+    expect(setEnvMock).toHaveBeenNthCalledWith(1, 'test-key', '')
 
-    await main.run()
-    expect(runMock).toHaveReturned()
-
-    // Verify that all of the core library functions were called correctly
-    expect(setFailedMock).toHaveBeenNthCalledWith(
-      1,
-      'milliseconds not a number'
-    )
-    expect(errorMock).not.toHaveBeenCalled()
+    expect(outputMock).toHaveBeenNthCalledWith(1, 'test', 'test-secret')
   })
 })

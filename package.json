@@ -1,16 +1,16 @@
 {
   "name": "typescript-action",
   "description": "GitHub Actions TypeScript template",
-  "version": "0.0.0",
-  "author": "",
+  "version": "0.1.0",
+  "author": "Lemon",
   "private": true,
-  "homepage": "https://github.com/actions/typescript-action",
+  "homepage": "https://github.com/bxb100/load-secrets-action",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/bxb100/load-secrets-action.git"
   },
   "bugs": {
-    "url": "https://github.com/actions/typescript-action/issues"
+    "url": "https://github.com/bxb100/load-secrets-action/issues"
   },
   "keywords": [
     "actions",
@@ -67,6 +67,7 @@
     ]
   },
   "dependencies": {
+    "@1password/sdk": "^0.1.3",
     "@actions/core": "^1.11.1"
   },
   "devDependencies": {

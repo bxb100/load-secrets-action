@@ -1,26 +1,27 @@
 import * as core from '@actions/core'
-import { wait } from './wait'
+import {
+  load_secret_refs_from_env,
+  load_secrets,
+  unset_previous
+} from './utils'
 
-/**
- * The main function for the action.
- * @returns {Promise<void>} Resolves when the action is complete.
- */
 export async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
+    const should_unset_previous = core.getBooleanInput('unset-previous')
+    const export_env = core.getBooleanInput('export-env')
 
-    // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-    core.debug(`Waiting ${ms} milliseconds ...`)
+    if (should_unset_previous) {
+      unset_previous()
+    }
 
-    // Log the current timestamp, wait, then log the new timestamp
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
-
-    // Set outputs for other workflow steps to use
-    core.setOutput('time', new Date().toTimeString())
+    const refs = load_secret_refs_from_env()
+    await load_secrets(refs, export_env)
   } catch (error) {
-    // Fail the workflow run if an error occurs
-    if (error instanceof Error) core.setFailed(error.message)
+    console.log(error)
+    if (error instanceof Error) {
+      core.setFailed(error)
+    } else {
+      core.setFailed(String(error))
+    }
   }
 }

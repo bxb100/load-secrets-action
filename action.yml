@@ -1,23 +1,22 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Load secrets from 1Password'
+description:
+  'Make secrets from 1Password Connect available as environment variables in the
+  next steps.'
+author: 'Lemon'
 
-# Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
-  icon: 'heart'
-  color: 'red'
+  icon: lock
+  color: blue
 
-# Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
-    required: true
-    default: '1000'
-
-# Define your outputs here.
-outputs:
-  time:
-    description: 'Your output description here'
+  unset-previous:
+    description:
+      Whether to unset environment variables populated by 1Password in earlier
+      job steps
+    default: 'false'
+  export-env:
+    description: Export the secrets as environment variables
+    default: 'true'
 
 runs:
   using: node20

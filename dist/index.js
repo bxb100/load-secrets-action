@@ -1,6 +1,1267 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 9295:
+/***/ ((module) => {
+
+function webpackEmptyContext(req) {
+	var e = new Error("Cannot find module '" + req + "'");
+	e.code = 'MODULE_NOT_FOUND';
+	throw e;
+}
+webpackEmptyContext.keys = () => ([]);
+webpackEmptyContext.resolve = webpackEmptyContext;
+webpackEmptyContext.id = 9295;
+module.exports = webpackEmptyContext;
+
+/***/ }),
+
+/***/ 2872:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+
+let imports = {};
+imports['__wbindgen_placeholder__'] = module.exports;
+let wasm;
+const { TextDecoder, TextEncoder } = __nccwpck_require__(9023);
+
+let cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
+
+cachedTextDecoder.decode();
+
+let cachedUint8ArrayMemory0 = null;
+
+function getUint8ArrayMemory0() {
+    if (cachedUint8ArrayMemory0 === null || cachedUint8ArrayMemory0.byteLength === 0) {
+        cachedUint8ArrayMemory0 = new Uint8Array(wasm.memory.buffer);
+    }
+    return cachedUint8ArrayMemory0;
+}
+
+function getStringFromWasm0(ptr, len) {
+    ptr = ptr >>> 0;
+    return cachedTextDecoder.decode(getUint8ArrayMemory0().subarray(ptr, ptr + len));
+}
+
+const heap = new Array(128).fill(undefined);
+
+heap.push(undefined, null, true, false);
+
+let heap_next = heap.length;
+
+function addHeapObject(obj) {
+    if (heap_next === heap.length) heap.push(heap.length + 1);
+    const idx = heap_next;
+    heap_next = heap[idx];
+
+    heap[idx] = obj;
+    return idx;
+}
+
+function getObject(idx) { return heap[idx]; }
+
+function dropObject(idx) {
+    if (idx < 132) return;
+    heap[idx] = heap_next;
+    heap_next = idx;
+}
+
+function takeObject(idx) {
+    const ret = getObject(idx);
+    dropObject(idx);
+    return ret;
+}
+
+let WASM_VECTOR_LEN = 0;
+
+let cachedTextEncoder = new TextEncoder('utf-8');
+
+const encodeString = (typeof cachedTextEncoder.encodeInto === 'function'
+    ? function (arg, view) {
+    return cachedTextEncoder.encodeInto(arg, view);
+}
+    : function (arg, view) {
+    const buf = cachedTextEncoder.encode(arg);
+    view.set(buf);
+    return {
+        read: arg.length,
+        written: buf.length
+    };
+});
+
+function passStringToWasm0(arg, malloc, realloc) {
+
+    if (realloc === undefined) {
+        const buf = cachedTextEncoder.encode(arg);
+        const ptr = malloc(buf.length, 1) >>> 0;
+        getUint8ArrayMemory0().subarray(ptr, ptr + buf.length).set(buf);
+        WASM_VECTOR_LEN = buf.length;
+        return ptr;
+    }
+
+    let len = arg.length;
+    let ptr = malloc(len, 1) >>> 0;
+
+    const mem = getUint8ArrayMemory0();
+
+    let offset = 0;
+
+    for (; offset < len; offset++) {
+        const code = arg.charCodeAt(offset);
+        if (code > 0x7F) break;
+        mem[ptr + offset] = code;
+    }
+
+    if (offset !== len) {
+        if (offset !== 0) {
+            arg = arg.slice(offset);
+        }
+        ptr = realloc(ptr, len, len = offset + arg.length * 3, 1) >>> 0;
+        const view = getUint8ArrayMemory0().subarray(ptr + offset, ptr + len);
+        const ret = encodeString(arg, view);
+
+        offset += ret.written;
+        ptr = realloc(ptr, len, offset, 1) >>> 0;
+    }
+
+    WASM_VECTOR_LEN = offset;
+    return ptr;
+}
+
+function isLikeNone(x) {
+    return x === undefined || x === null;
+}
+
+let cachedDataViewMemory0 = null;
+
+function getDataViewMemory0() {
+    if (cachedDataViewMemory0 === null || cachedDataViewMemory0.buffer.detached === true || (cachedDataViewMemory0.buffer.detached === undefined && cachedDataViewMemory0.buffer !== wasm.memory.buffer)) {
+        cachedDataViewMemory0 = new DataView(wasm.memory.buffer);
+    }
+    return cachedDataViewMemory0;
+}
+
+function debugString(val) {
+    // primitive types
+    const type = typeof val;
+    if (type == 'number' || type == 'boolean' || val == null) {
+        return  `${val}`;
+    }
+    if (type == 'string') {
+        return `"${val}"`;
+    }
+    if (type == 'symbol') {
+        const description = val.description;
+        if (description == null) {
+            return 'Symbol';
+        } else {
+            return `Symbol(${description})`;
+        }
+    }
+    if (type == 'function') {
+        const name = val.name;
+        if (typeof name == 'string' && name.length > 0) {
+            return `Function(${name})`;
+        } else {
+            return 'Function';
+        }
+    }
+    // objects
+    if (Array.isArray(val)) {
+        const length = val.length;
+        let debug = '[';
+        if (length > 0) {
+            debug += debugString(val[0]);
+        }
+        for(let i = 1; i < length; i++) {
+            debug += ', ' + debugString(val[i]);
+        }
+        debug += ']';
+        return debug;
+    }
+    // Test for built-in
+    const builtInMatches = /\[object ([^\]]+)\]/.exec(toString.call(val));
+    let className;
+    if (builtInMatches.length > 1) {
+        className = builtInMatches[1];
+    } else {
+        // Failed to match the standard '[object ClassName]'
+        return toString.call(val);
+    }
+    if (className == 'Object') {
+        // we're a user defined class or Object
+        // JSON.stringify avoids problems with cycles, and is generally much
+        // easier than looping through ownProperties of `val`.
+        try {
+            return 'Object(' + JSON.stringify(val) + ')';
+        } catch (_) {
+            return 'Object';
+        }
+    }
+    // errors
+    if (val instanceof Error) {
+        return `${val.name}: ${val.message}\n${val.stack}`;
+    }
+    // TODO we could test for more things here, like `Set`s and `Map`s.
+    return className;
+}
+
+const CLOSURE_DTORS = (typeof FinalizationRegistry === 'undefined')
+    ? { register: () => {}, unregister: () => {} }
+    : new FinalizationRegistry(state => {
+    wasm.__wbindgen_export_2.get(state.dtor)(state.a, state.b)
+});
+
+function makeMutClosure(arg0, arg1, dtor, f) {
+    const state = { a: arg0, b: arg1, cnt: 1, dtor };
+    const real = (...args) => {
+        // First up with a closure we increment the internal reference
+        // count. This ensures that the Rust closure environment won't
+        // be deallocated while we're invoking it.
+        state.cnt++;
+        const a = state.a;
+        state.a = 0;
+        try {
+            return f(a, state.b, ...args);
+        } finally {
+            if (--state.cnt === 0) {
+                wasm.__wbindgen_export_2.get(state.dtor)(a, state.b);
+                CLOSURE_DTORS.unregister(state);
+            } else {
+                state.a = a;
+            }
+        }
+    };
+    real.original = state;
+    CLOSURE_DTORS.register(real, state, state);
+    return real;
+}
+function __wbg_adapter_26(arg0, arg1, arg2) {
+    wasm._dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h992c8f981e42a5a1(arg0, arg1, addHeapObject(arg2));
+}
+
+/**
+* Initializes an SDK client with a given configuration.
+* @param {string} config
+* @returns {Promise<string>}
+*/
+module.exports.init_client = function(config) {
+    const ptr0 = passStringToWasm0(config, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ret = wasm.init_client(ptr0, len0);
+    return takeObject(ret);
+};
+
+/**
+* Handles all invocations to the SDK core received from the SDK.
+* @param {string} parameters
+* @returns {Promise<string>}
+*/
+module.exports.invoke = function(parameters) {
+    const ptr0 = passStringToWasm0(parameters, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ret = wasm.invoke(ptr0, len0);
+    return takeObject(ret);
+};
+
+/**
+* Drops a client, releasing the memory allocated for it.
+* @param {string} client_id
+*/
+module.exports.release_client = function(client_id) {
+    try {
+        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+        const ptr0 = passStringToWasm0(client_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        wasm.release_client(retptr, ptr0, len0);
+        var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+        var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+        if (r1) {
+            throw takeObject(r0);
+        }
+    } finally {
+        wasm.__wbindgen_add_to_stack_pointer(16);
+    }
+};
+
+function handleError(f, args) {
+    try {
+        return f.apply(this, args);
+    } catch (e) {
+        wasm.__wbindgen_exn_store(addHeapObject(e));
+    }
+}
+function __wbg_adapter_104(arg0, arg1, arg2, arg3) {
+    wasm.wasm_bindgen__convert__closures__invoke2_mut__h090ddf62adce7cd0(arg0, arg1, addHeapObject(arg2), addHeapObject(arg3));
+}
+
+module.exports.__wbindgen_string_new = function(arg0, arg1) {
+    const ret = getStringFromWasm0(arg0, arg1);
+    return addHeapObject(ret);
+};
+
+module.exports.__wbindgen_object_drop_ref = function(arg0) {
+    takeObject(arg0);
+};
+
+module.exports.__wbg_static_accessor_performance_da77b3a901a72934 = function() {
+    const ret = performance;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbindgen_is_string = function(arg0) {
+    const ret = typeof(getObject(arg0)) === 'string';
+    return ret;
+};
+
+module.exports.__wbindgen_cb_drop = function(arg0) {
+    const obj = takeObject(arg0).original;
+    if (obj.cnt-- == 1) {
+        obj.a = 0;
+        return true;
+    }
+    const ret = false;
+    return ret;
+};
+
+module.exports.__wbindgen_object_clone_ref = function(arg0) {
+    const ret = getObject(arg0);
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_fetch_bc7c8e27076a5c84 = function(arg0) {
+    const ret = fetch(getObject(arg0));
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_queueMicrotask_3cbae2ec6b6cd3d6 = function(arg0) {
+    const ret = getObject(arg0).queueMicrotask;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbindgen_is_function = function(arg0) {
+    const ret = typeof(getObject(arg0)) === 'function';
+    return ret;
+};
+
+module.exports.__wbg_queueMicrotask_481971b0d87f3dd4 = function(arg0) {
+    queueMicrotask(getObject(arg0));
+};
+
+module.exports.__wbg_crypto_1d1f22824a6a080c = function(arg0) {
+    const ret = getObject(arg0).crypto;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbindgen_is_object = function(arg0) {
+    const val = getObject(arg0);
+    const ret = typeof(val) === 'object' && val !== null;
+    return ret;
+};
+
+module.exports.__wbg_process_4a72847cc503995b = function(arg0) {
+    const ret = getObject(arg0).process;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_versions_f686565e586dd935 = function(arg0) {
+    const ret = getObject(arg0).versions;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_node_104a2ff8d6ea03a2 = function(arg0) {
+    const ret = getObject(arg0).node;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_require_cca90b1a94a0255b = function() { return handleError(function () {
+    const ret = undefined;
+    return addHeapObject(__nccwpck_require__(9295));
+}, arguments) };
+
+module.exports.__wbg_msCrypto_eb05e62b530a1508 = function(arg0) {
+    const ret = getObject(arg0).msCrypto;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_randomFillSync_5c9c955aa56b6049 = function() { return handleError(function (arg0, arg1) {
+    getObject(arg0).randomFillSync(takeObject(arg1));
+}, arguments) };
+
+module.exports.__wbg_getRandomValues_3aa56aa6edec874c = function() { return handleError(function (arg0, arg1) {
+    getObject(arg0).getRandomValues(getObject(arg1));
+}, arguments) };
+
+module.exports.__wbg_now_4e659b3d15f470d9 = function(arg0) {
+    const ret = getObject(arg0).now();
+    return ret;
+};
+
+module.exports.__wbg_fetch_921fad6ef9e883dd = function(arg0, arg1) {
+    const ret = getObject(arg0).fetch(getObject(arg1));
+    return addHeapObject(ret);
+};
+
+module.exports.__wbindgen_string_get = function(arg0, arg1) {
+    const obj = getObject(arg1);
+    const ret = typeof(obj) === 'string' ? obj : undefined;
+    var ptr1 = isLikeNone(ret) ? 0 : passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    var len1 = WASM_VECTOR_LEN;
+    getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
+    getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
+};
+
+module.exports.__wbg_new_ab6fd82b10560829 = function() { return handleError(function () {
+    const ret = new Headers();
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_append_7bfcb4937d1d5e29 = function() { return handleError(function (arg0, arg1, arg2, arg3, arg4) {
+    getObject(arg0).append(getStringFromWasm0(arg1, arg2), getStringFromWasm0(arg3, arg4));
+}, arguments) };
+
+module.exports.__wbg_signal_a61f78a3478fd9bc = function(arg0) {
+    const ret = getObject(arg0).signal;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_new_0d76b0581eca6298 = function() { return handleError(function () {
+    const ret = new AbortController();
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_abort_2aa7521d5690750e = function(arg0) {
+    getObject(arg0).abort();
+};
+
+module.exports.__wbg_instanceof_Response_849eb93e75734b6e = function(arg0) {
+    let result;
+    try {
+        result = getObject(arg0) instanceof Response;
+    } catch (_) {
+        result = false;
+    }
+    const ret = result;
+    return ret;
+};
+
+module.exports.__wbg_url_5f6dc4009ac5f99d = function(arg0, arg1) {
+    const ret = getObject(arg1).url;
+    const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len1 = WASM_VECTOR_LEN;
+    getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
+    getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
+};
+
+module.exports.__wbg_status_61a01141acd3cf74 = function(arg0) {
+    const ret = getObject(arg0).status;
+    return ret;
+};
+
+module.exports.__wbg_headers_9620bfada380764a = function(arg0) {
+    const ret = getObject(arg0).headers;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_arrayBuffer_29931d52c7206b02 = function() { return handleError(function (arg0) {
+    const ret = getObject(arg0).arrayBuffer();
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_newwithstrandinit_3fd6fba4083ff2d0 = function() { return handleError(function (arg0, arg1, arg2) {
+    const ret = new Request(getStringFromWasm0(arg0, arg1), getObject(arg2));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_newnoargs_e258087cd0daa0ea = function(arg0, arg1) {
+    const ret = new Function(getStringFromWasm0(arg0, arg1));
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_next_40fc327bfc8770e6 = function(arg0) {
+    const ret = getObject(arg0).next;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_next_196c84450b364254 = function() { return handleError(function (arg0) {
+    const ret = getObject(arg0).next();
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_done_298b57d23c0fc80c = function(arg0) {
+    const ret = getObject(arg0).done;
+    return ret;
+};
+
+module.exports.__wbg_value_d93c65011f51a456 = function(arg0) {
+    const ret = getObject(arg0).value;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_iterator_2cee6dadfd956dfa = function() {
+    const ret = Symbol.iterator;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_get_e3c254076557e348 = function() { return handleError(function (arg0, arg1) {
+    const ret = Reflect.get(getObject(arg0), getObject(arg1));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_call_27c0f87801dedf93 = function() { return handleError(function (arg0, arg1) {
+    const ret = getObject(arg0).call(getObject(arg1));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_new_72fb9a18b5ae2624 = function() {
+    const ret = new Object();
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_self_ce0dbfc45cf2f5be = function() { return handleError(function () {
+    const ret = self.self;
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_window_c6fb939a7f436783 = function() { return handleError(function () {
+    const ret = window.window;
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_globalThis_d1e6af4856ba331b = function() { return handleError(function () {
+    const ret = globalThis.globalThis;
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_global_207b558942527489 = function() { return handleError(function () {
+    const ret = global.global;
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbindgen_is_undefined = function(arg0) {
+    const ret = getObject(arg0) === undefined;
+    return ret;
+};
+
+module.exports.__wbg_call_b3ca7c6051f9bec1 = function() { return handleError(function (arg0, arg1, arg2) {
+    const ret = getObject(arg0).call(getObject(arg1), getObject(arg2));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_getFullYear_d7c822fa9c674c24 = function(arg0) {
+    const ret = getObject(arg0).getFullYear();
+    return ret;
+};
+
+module.exports.__wbg_new0_7d84e5b2cd9fdc73 = function() {
+    const ret = new Date();
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_now_3014639a94423537 = function() {
+    const ret = Date.now();
+    return ret;
+};
+
+module.exports.__wbg_new_81740750da40724f = function(arg0, arg1) {
+    try {
+        var state0 = {a: arg0, b: arg1};
+        var cb0 = (arg0, arg1) => {
+            const a = state0.a;
+            state0.a = 0;
+            try {
+                return __wbg_adapter_104(a, state0.b, arg0, arg1);
+            } finally {
+                state0.a = a;
+            }
+        };
+        const ret = new Promise(cb0);
+        return addHeapObject(ret);
+    } finally {
+        state0.a = state0.b = 0;
+    }
+};
+
+module.exports.__wbg_resolve_b0083a7967828ec8 = function(arg0) {
+    const ret = Promise.resolve(getObject(arg0));
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_then_0c86a60e8fcfe9f6 = function(arg0, arg1) {
+    const ret = getObject(arg0).then(getObject(arg1));
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_then_a73caa9a87991566 = function(arg0, arg1, arg2) {
+    const ret = getObject(arg0).then(getObject(arg1), getObject(arg2));
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_buffer_12d079cc21e14bdb = function(arg0) {
+    const ret = getObject(arg0).buffer;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_newwithbyteoffsetandlength_aa4a17c33a06e5cb = function(arg0, arg1, arg2) {
+    const ret = new Uint8Array(getObject(arg0), arg1 >>> 0, arg2 >>> 0);
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_new_63b92bc8671ed464 = function(arg0) {
+    const ret = new Uint8Array(getObject(arg0));
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_set_a47bac70306a19a7 = function(arg0, arg1, arg2) {
+    getObject(arg0).set(getObject(arg1), arg2 >>> 0);
+};
+
+module.exports.__wbg_length_c20a40f15020d68a = function(arg0) {
+    const ret = getObject(arg0).length;
+    return ret;
+};
+
+module.exports.__wbg_newwithlength_e9b4878cebadb3d3 = function(arg0) {
+    const ret = new Uint8Array(arg0 >>> 0);
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_subarray_a1f73cd4b5b42fe1 = function(arg0, arg1, arg2) {
+    const ret = getObject(arg0).subarray(arg1 >>> 0, arg2 >>> 0);
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_stringify_8887fe74e1c50d81 = function() { return handleError(function (arg0) {
+    const ret = JSON.stringify(getObject(arg0));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_has_0af94d20077affa2 = function() { return handleError(function (arg0, arg1) {
+    const ret = Reflect.has(getObject(arg0), getObject(arg1));
+    return ret;
+}, arguments) };
+
+module.exports.__wbg_set_1f9b04f170055d33 = function() { return handleError(function (arg0, arg1, arg2) {
+    const ret = Reflect.set(getObject(arg0), getObject(arg1), getObject(arg2));
+    return ret;
+}, arguments) };
+
+module.exports.__wbindgen_debug_string = function(arg0, arg1) {
+    const ret = debugString(getObject(arg1));
+    const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len1 = WASM_VECTOR_LEN;
+    getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
+    getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
+};
+
+module.exports.__wbindgen_throw = function(arg0, arg1) {
+    throw new Error(getStringFromWasm0(arg0, arg1));
+};
+
+module.exports.__wbindgen_memory = function() {
+    const ret = wasm.memory;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbindgen_closure_wrapper4794 = function(arg0, arg1, arg2) {
+    const ret = makeMutClosure(arg0, arg1, 1452, __wbg_adapter_26);
+    return addHeapObject(ret);
+};
+
+const path = __nccwpck_require__.ab + "core_bg.wasm";
+const bytes = (__nccwpck_require__(9896).readFileSync)(__nccwpck_require__.ab + "core_bg.wasm");
+
+const wasmModule = new WebAssembly.Module(bytes);
+const wasmInstance = new WebAssembly.Instance(wasmModule, imports);
+wasm = wasmInstance.exports;
+module.exports.__wasm = wasm;
+
+
+
+/***/ }),
+
+/***/ 351:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+// Code generated by op-codegen - DO NOT EDIT MANUALLY
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Client = void 0;
+const secrets_js_1 = __nccwpck_require__(5475);
+const items_js_1 = __nccwpck_require__(9018);
+const vaults_js_1 = __nccwpck_require__(3961);
+class Client {
+    constructor(innerClient) {
+        this.secrets = new secrets_js_1.Secrets(innerClient);
+        this.items = new items_js_1.Items(innerClient);
+        this.vaults = new vaults_js_1.Vaults(innerClient);
+    }
+}
+exports.Client = Client;
+
+
+/***/ }),
+
+/***/ 9855:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.createClientWithCore = void 0;
+const configuration_js_1 = __nccwpck_require__(3876);
+const client_js_1 = __nccwpck_require__(351);
+const finalizationRegistry = new FinalizationRegistry((heldClient) => {
+    heldClient.core.releaseClient(heldClient.id);
+});
+/**
+ * Creates a 1Password SDK client with a given core implementation.
+ * @returns The authenticated 1Password SDK client.
+ */
+const createClientWithCore = (config, core) => __awaiter(void 0, void 0, void 0, function* () {
+    const authConfig = (0, configuration_js_1.clientAuthConfig)(config);
+    const clientId = yield core.initClient(authConfig);
+    const inner = {
+        id: parseInt(clientId, 10),
+        core,
+    };
+    const client = new client_js_1.Client(inner);
+    // Cleans up associated memory from core when client instance goes out of scope.
+    finalizationRegistry.register(client, inner);
+    return client;
+});
+exports.createClientWithCore = createClientWithCore;
+
+
+/***/ }),
+
+/***/ 3876:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getOsName = exports.clientAuthConfig = exports.VERSION = exports.LANGUAGE = void 0;
+const os_1 = __importDefault(__nccwpck_require__(857));
+const version_js_1 = __nccwpck_require__(7202);
+exports.LANGUAGE = "JS";
+exports.VERSION = version_js_1.SDK_BUILD_NUMBER;
+/**
+ * Creates a default client configuration.
+ * @returns The client configuration to instantiate the client with.
+ */
+const clientAuthConfig = (userConfig) => {
+    // TODO: Add logic for computing the correct sanitized version value for each platform
+    const defaultOsVersion = "0.0.0";
+    return {
+        serviceAccountToken: userConfig.auth,
+        programmingLanguage: exports.LANGUAGE,
+        sdkVersion: exports.VERSION,
+        integrationName: userConfig.integrationName,
+        integrationVersion: userConfig.integrationVersion,
+        requestLibraryName: "Fetch API",
+        requestLibraryVersion: "Fetch API",
+        os: (0, exports.getOsName)(),
+        osVersion: defaultOsVersion,
+        architecture: os_1.default.arch(),
+    };
+};
+exports.clientAuthConfig = clientAuthConfig;
+const getOsName = () => {
+    // Only supported on Node.js
+    const os_name = os_1.default.type().toLowerCase();
+    if (os_name === "windows_nt") {
+        return "windows";
+    }
+    return os_name;
+};
+exports.getOsName = getOsName;
+
+
+/***/ }),
+
+/***/ 747:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.SharedCore = void 0;
+const sdk_core_1 = __nccwpck_require__(2872);
+/**
+ *  An implementation of the `Core` interface that shares resources across all clients.
+ */
+class SharedCore {
+    initClient(config) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const serializedConfig = JSON.stringify(config);
+            return (0, sdk_core_1.init_client)(serializedConfig);
+        });
+    }
+    invoke(config) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const serializedConfig = JSON.stringify(config);
+            return (0, sdk_core_1.invoke)(serializedConfig);
+        });
+    }
+    releaseClient(clientId) {
+        const serializedId = JSON.stringify(clientId);
+        (0, sdk_core_1.release_client)(serializedId);
+    }
+}
+exports.SharedCore = SharedCore;
+
+
+/***/ }),
+
+/***/ 9018:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+// Code generated by op-codegen - DO NOT EDIT MANUALLY
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+};
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+};
+var _Items_inner;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Items = void 0;
+const iterator_js_1 = __nccwpck_require__(1702);
+class Items {
+    constructor(inner) {
+        _Items_inner.set(this, void 0);
+        __classPrivateFieldSet(this, _Items_inner, inner, "f");
+    }
+    /**
+     * Create a new item
+     */
+    create(params) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const invocationConfig = {
+                invocation: {
+                    clientId: __classPrivateFieldGet(this, _Items_inner, "f").id,
+                    parameters: {
+                        name: "ItemsCreate",
+                        parameters: {
+                            params,
+                        },
+                    },
+                },
+            };
+            return JSON.parse(yield __classPrivateFieldGet(this, _Items_inner, "f").core.invoke(invocationConfig));
+        });
+    }
+    /**
+     * Get an item by vault and item ID
+     */
+    get(vaultId, itemId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const invocationConfig = {
+                invocation: {
+                    clientId: __classPrivateFieldGet(this, _Items_inner, "f").id,
+                    parameters: {
+                        name: "ItemsGet",
+                        parameters: {
+                            vault_id: vaultId,
+                            item_id: itemId,
+                        },
+                    },
+                },
+            };
+            return JSON.parse(yield __classPrivateFieldGet(this, _Items_inner, "f").core.invoke(invocationConfig));
+        });
+    }
+    /**
+     * Update an existing item.
+     */
+    put(item) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const invocationConfig = {
+                invocation: {
+                    clientId: __classPrivateFieldGet(this, _Items_inner, "f").id,
+                    parameters: {
+                        name: "ItemsPut",
+                        parameters: {
+                            item,
+                        },
+                    },
+                },
+            };
+            return JSON.parse(yield __classPrivateFieldGet(this, _Items_inner, "f").core.invoke(invocationConfig));
+        });
+    }
+    /**
+     * Delete an item.
+     */
+    delete(vaultId, itemId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const invocationConfig = {
+                invocation: {
+                    clientId: __classPrivateFieldGet(this, _Items_inner, "f").id,
+                    parameters: {
+                        name: "ItemsDelete",
+                        parameters: {
+                            vault_id: vaultId,
+                            item_id: itemId,
+                        },
+                    },
+                },
+            };
+            yield __classPrivateFieldGet(this, _Items_inner, "f").core.invoke(invocationConfig);
+        });
+    }
+    /**
+     * List all items
+     */
+    listAll(vaultId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const invocationConfig = {
+                invocation: {
+                    clientId: __classPrivateFieldGet(this, _Items_inner, "f").id,
+                    parameters: {
+                        name: "ItemsListAll",
+                        parameters: {
+                            vault_id: vaultId,
+                        },
+                    },
+                },
+            };
+            return new iterator_js_1.SdkIterable(JSON.parse(yield __classPrivateFieldGet(this, _Items_inner, "f").core.invoke(invocationConfig)));
+        });
+    }
+}
+exports.Items = Items;
+_Items_inner = new WeakMap();
+
+
+/***/ }),
+
+/***/ 1702:
+/***/ (function(__unused_webpack_module, exports) {
+
+"use strict";
+
+var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
+var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var g = generator.apply(thisArg, _arguments || []), i, q = [];
+    return i = {}, verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
+    function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+    function fulfill(value) { resume("next", value); }
+    function reject(value) { resume("throw", value); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.SdkIterable = void 0;
+class SdkIterable {
+    constructor(elements) {
+        this.elements = elements;
+    }
+    [Symbol.asyncIterator]() {
+        return this.asyncIterator();
+    }
+    asyncIterator() {
+        return __asyncGenerator(this, arguments, function* asyncIterator_1() {
+            for (const element of this.elements) {
+                yield yield __await(yield __await(Promise.resolve(element)));
+            }
+        });
+    }
+}
+exports.SdkIterable = SdkIterable;
+
+
+/***/ }),
+
+/***/ 7837:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.createClient = exports.Secrets = exports.DEFAULT_INTEGRATION_VERSION = exports.DEFAULT_INTEGRATION_NAME = void 0;
+const core_js_1 = __nccwpck_require__(747);
+const client_builder_js_1 = __nccwpck_require__(9855);
+exports.DEFAULT_INTEGRATION_NAME = "Unknown";
+exports.DEFAULT_INTEGRATION_VERSION = "Unknown";
+var secrets_js_1 = __nccwpck_require__(5475);
+Object.defineProperty(exports, "Secrets", ({ enumerable: true, get: function () { return secrets_js_1.Secrets; } }));
+__exportStar(__nccwpck_require__(351), exports);
+__exportStar(__nccwpck_require__(8267), exports);
+/**
+ * Creates a default 1Password SDK client.
+ * @returns The authenticated 1Password SDK client.
+ */
+const createClient = (config) => __awaiter(void 0, void 0, void 0, function* () { return (0, client_builder_js_1.createClientWithCore)(config, new core_js_1.SharedCore()); });
+exports.createClient = createClient;
+
+
+/***/ }),
+
+/***/ 5475:
+/***/ (function(__unused_webpack_module, exports) {
+
+"use strict";
+
+// Code generated by op-codegen - DO NOT EDIT MANUALLY
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+};
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+};
+var _Secrets_inner;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Secrets = void 0;
+class Secrets {
+    constructor(inner) {
+        _Secrets_inner.set(this, void 0);
+        __classPrivateFieldSet(this, _Secrets_inner, inner, "f");
+    }
+    /**
+     * Resolve returns the secret the provided secret reference points to.
+     */
+    resolve(secretReference) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const invocationConfig = {
+                invocation: {
+                    clientId: __classPrivateFieldGet(this, _Secrets_inner, "f").id,
+                    parameters: {
+                        name: "SecretsResolve",
+                        parameters: {
+                            secret_reference: secretReference,
+                        },
+                    },
+                },
+            };
+            return JSON.parse(yield __classPrivateFieldGet(this, _Secrets_inner, "f").core.invoke(invocationConfig));
+        });
+    }
+}
+exports.Secrets = Secrets;
+_Secrets_inner = new WeakMap();
+
+
+/***/ }),
+
+/***/ 8267:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+/*
+ Generated by typeshare 1.11.0
+*/
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AutofillBehavior = exports.ItemFieldType = exports.ItemCategory = void 0;
+var ItemCategory;
+(function (ItemCategory) {
+    ItemCategory["Login"] = "Login";
+    ItemCategory["SecureNote"] = "SecureNote";
+    ItemCategory["CreditCard"] = "CreditCard";
+    ItemCategory["CryptoWallet"] = "CryptoWallet";
+    ItemCategory["Identity"] = "Identity";
+    ItemCategory["Password"] = "Password";
+    ItemCategory["Document"] = "Document";
+    ItemCategory["ApiCredentials"] = "ApiCredentials";
+    ItemCategory["BankAccount"] = "BankAccount";
+    ItemCategory["Database"] = "Database";
+    ItemCategory["DriverLicense"] = "DriverLicense";
+    ItemCategory["Email"] = "Email";
+    ItemCategory["MedicalRecord"] = "MedicalRecord";
+    ItemCategory["Membership"] = "Membership";
+    ItemCategory["OutdoorLicense"] = "OutdoorLicense";
+    ItemCategory["Passport"] = "Passport";
+    ItemCategory["Rewards"] = "Rewards";
+    ItemCategory["Router"] = "Router";
+    ItemCategory["Server"] = "Server";
+    ItemCategory["SshKey"] = "SshKey";
+    ItemCategory["SocialSecurityNumber"] = "SocialSecurityNumber";
+    ItemCategory["SoftwareLicense"] = "SoftwareLicense";
+    ItemCategory["Person"] = "Person";
+    ItemCategory["Unsupported"] = "Unsupported";
+})(ItemCategory || (exports.ItemCategory = ItemCategory = {}));
+var ItemFieldType;
+(function (ItemFieldType) {
+    ItemFieldType["Text"] = "Text";
+    ItemFieldType["Concealed"] = "Concealed";
+    ItemFieldType["CreditCardType"] = "CreditCardType";
+    ItemFieldType["Phone"] = "Phone";
+    ItemFieldType["Url"] = "Url";
+    ItemFieldType["Totp"] = "Totp";
+    ItemFieldType["Unsupported"] = "Unsupported";
+})(ItemFieldType || (exports.ItemFieldType = ItemFieldType = {}));
+/**
+ * Controls the auto-fill behavior of a website.
+ *
+ *
+ * For more information, visit https://support.1password.com/autofill-behavior/
+ */
+var AutofillBehavior;
+(function (AutofillBehavior) {
+    /** Auto-fill any page that’s part of the website, including subdomains */
+    AutofillBehavior["AnywhereOnWebsite"] = "AnywhereOnWebsite";
+    /** Auto-fill only if the domain (hostname and port) is an exact match. */
+    AutofillBehavior["ExactDomain"] = "ExactDomain";
+    /** Never auto-fill on this website */
+    AutofillBehavior["Never"] = "Never";
+})(AutofillBehavior || (exports.AutofillBehavior = AutofillBehavior = {}));
+
+
+/***/ }),
+
+/***/ 3961:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+// Code generated by op-codegen - DO NOT EDIT MANUALLY
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+};
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+};
+var _Vaults_inner;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Vaults = void 0;
+const iterator_js_1 = __nccwpck_require__(1702);
+class Vaults {
+    constructor(inner) {
+        _Vaults_inner.set(this, void 0);
+        __classPrivateFieldSet(this, _Vaults_inner, inner, "f");
+    }
+    /**
+     * List all vaults
+     */
+    listAll() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const invocationConfig = {
+                invocation: {
+                    clientId: __classPrivateFieldGet(this, _Vaults_inner, "f").id,
+                    parameters: {
+                        name: "VaultsListAll",
+                        parameters: {},
+                    },
+                },
+            };
+            return new iterator_js_1.SdkIterable(JSON.parse(yield __classPrivateFieldGet(this, _Vaults_inner, "f").core.invoke(invocationConfig)));
+        });
+    }
+}
+exports.Vaults = Vaults;
+_Vaults_inner = new WeakMap();
+
+
+/***/ }),
+
+/***/ 7202:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.SDK_BUILD_NUMBER = exports.SDK_VERSION = void 0;
+exports.SDK_VERSION = "0.1.3";
+exports.SDK_BUILD_NUMBER = "0010301";
+const SDK_CORE_VERSION = "0.1.3";
+
+
+/***/ }),
+
 /***/ 4914:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -25626,6 +26887,19 @@ module.exports = {
 
 /***/ }),
 
+/***/ 7242:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.TOKEN_NAME = exports.ENV_MANAGED_VARIABLES = void 0;
+exports.ENV_MANAGED_VARIABLES = 'OP_MANAGED_VARIABLES';
+exports.TOKEN_NAME = 'OP_SERVICE_ACCOUNT_TOKEN';
+
+
+/***/ }),
+
 /***/ 1730:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -25657,52 +26931,107 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = run;
 const core = __importStar(__nccwpck_require__(7484));
-const wait_1 = __nccwpck_require__(910);
-/**
- * The main function for the action.
- * @returns {Promise<void>} Resolves when the action is complete.
- */
+const utils_1 = __nccwpck_require__(1798);
 async function run() {
     try {
-        const ms = core.getInput('milliseconds');
-        // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-        core.debug(`Waiting ${ms} milliseconds ...`);
-        // Log the current timestamp, wait, then log the new timestamp
-        core.debug(new Date().toTimeString());
-        await (0, wait_1.wait)(parseInt(ms, 10));
-        core.debug(new Date().toTimeString());
-        // Set outputs for other workflow steps to use
-        core.setOutput('time', new Date().toTimeString());
+        const should_unset_previous = core.getBooleanInput('unset-previous');
+        const export_env = core.getBooleanInput('export-env');
+        if (should_unset_previous) {
+            (0, utils_1.unset_previous)();
+        }
+        const refs = (0, utils_1.load_secret_refs_from_env)();
+        await (0, utils_1.load_secrets)(refs, export_env);
     }
     catch (error) {
-        // Fail the workflow run if an error occurs
-        if (error instanceof Error)
-            core.setFailed(error.message);
+        console.log(error);
+        if (error instanceof Error) {
+            core.setFailed(error);
+        }
+        else {
+            core.setFailed(String(error));
+        }
     }
 }
 
 
 /***/ }),
 
-/***/ 910:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 1798:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.wait = wait;
-/**
- * Wait for a number of milliseconds.
- * @param milliseconds The number of milliseconds to wait.
- * @returns {Promise<string>} Resolves with 'done!' after the wait is over.
- */
-async function wait(milliseconds) {
-    return new Promise(resolve => {
-        if (isNaN(milliseconds)) {
-            throw new Error('milliseconds not a number');
-        }
-        setTimeout(() => resolve('done!'), milliseconds);
+exports.load_secret_refs_from_env = load_secret_refs_from_env;
+exports.load_secrets = load_secrets;
+exports.unset_previous = unset_previous;
+const process = __importStar(__nccwpck_require__(1708));
+const sdk_1 = __nccwpck_require__(7837);
+const node_assert_1 = __importDefault(__nccwpck_require__(4589));
+const core = __importStar(__nccwpck_require__(7484));
+const constants_1 = __nccwpck_require__(7242);
+function load_secret_refs_from_env() {
+    // secret references `op://<vault-name>/<item-name>/[section-name/]<field-name>`
+    const refs = Object.entries(process.env).filter(([, v]) => v && v.startsWith('op://'));
+    return Object.fromEntries(refs);
+}
+async function load_secrets(refs, export_env) {
+    (0, node_assert_1.default)(process.env[constants_1.TOKEN_NAME], `${constants_1.TOKEN_NAME} is required`);
+    const client = await (0, sdk_1.createClient)({
+        auth: process.env[constants_1.TOKEN_NAME],
+        integrationName: '1Password GitHub Action',
+        integrationVersion: 'v0.1.0'
     });
+    for (const [key, ref] of Object.entries(refs)) {
+        const secret = await client.secrets.resolve(ref);
+        // mask secret in logs
+        core.setSecret(secret);
+        if (export_env) {
+            core.exportVariable(key, secret);
+        }
+        else {
+            core.setOutput(key, secret);
+        }
+    }
+    if (export_env) {
+        core.exportVariable(constants_1.ENV_MANAGED_VARIABLES, Object.keys(refs).join(','));
+    }
+}
+function unset_previous() {
+    const previous = process.env[constants_1.ENV_MANAGED_VARIABLES];
+    if (previous) {
+        core.info('Unsetting previous values ...');
+        for (const key of previous.split(',')) {
+            core.info(`Unsetting ${key}`);
+            core.exportVariable(key, '');
+        }
+    }
 }
 
 
@@ -25812,11 +27141,27 @@ module.exports = require("net");
 
 /***/ }),
 
+/***/ 4589:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:assert");
+
+/***/ }),
+
 /***/ 8474:
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("node:events");
+
+/***/ }),
+
+/***/ 1708:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:process");
 
 /***/ }),
 
@@ -27606,6 +28951,11 @@ module.exports = parseParams
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
