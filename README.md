@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Load secret
-        uses: bxb100/load-secrets-action@v1
+        uses: bxb100/load-secrets-action@v0
         with:
           # Export loaded secrets as environment variables
           export-env: true
