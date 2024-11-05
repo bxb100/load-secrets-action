@@ -4,10 +4,14 @@
 </div>
 
 ---
-This Action is same as official [load-secrets-action](https://github.com/1Password/load-secrets-action), using 1Password Javascript [SDK](https://github.com/1Password/onepassword-sdk-js), to allow use in Windows, Linux, macOS
 
-This project only support [1Password Service Account](https://developer.1password.com/docs/service-accounts/get-started)
+This Action is same as official
+[load-secrets-action](https://github.com/1Password/load-secrets-action), using
+1Password Javascript [SDK](https://github.com/1Password/onepassword-sdk-js), to
+allow use in Windows, Linux, macOS
 
+This project only support
+[1Password Service Account](https://developer.1password.com/docs/service-accounts/get-started)
 
 ## Usage
 
