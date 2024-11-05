@@ -1,13 +1,18 @@
-<div align="center">
-  <h1>Load Secrets from 1Password - GitHub Action</h1>
-  <p>Provide the secrets your GitHub runner needs from 1Password.</p>
-</div>
+# Load Secrets from 1Password - GitHub Action
+
+Provide the secrets your GitHub runner needs from 1Password.
+
+[![Check Transpiled JavaScript](https://github.com/bxb100/load-secrets-action/actions/workflows/check-dist.yml/badge.svg)](https://github.com/bxb100/load-secrets-action/actions/workflows/check-dist.yml)
+[![CodeQL](https://github.com/bxb100/load-secrets-action/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/bxb100/load-secrets-action/actions/workflows/codeql-analysis.yml)
+[![Continuous Integration](https://github.com/bxb100/load-secrets-action/actions/workflows/ci.yml/badge.svg)](https://github.com/bxb100/load-secrets-action/actions/workflows/ci.yml)
+[![Lint Codebase](https://github.com/bxb100/load-secrets-action/actions/workflows/linter.yml/badge.svg)](https://github.com/bxb100/load-secrets-action/actions/workflows/linter.yml)
+[![Coverage](./badges/coverage.svg)](./badges/coverage.svg)
 
 ---
 
 This Action is same as official
 [load-secrets-action](https://github.com/1Password/load-secrets-action), using
-1Password Javascript [SDK](https://github.com/1Password/onepassword-sdk-js), to
+1Password JavaScript [SDK](https://github.com/1Password/onepassword-sdk-js), to
 allow use in Windows, Linux, macOS
 
 This project only support
