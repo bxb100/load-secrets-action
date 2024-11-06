@@ -63,7 +63,7 @@ jobs:
         run: |
           echo ${{ secrets.OP_CONNECT_CREDENTIALS }} > 1password-credentials.json
           cp .github/fixture/docker-compose.yml docker-compose.yml
-          docker compose up -d
+          docker-compose up -d
 
       - name: Test Connect
         id: test-connect
