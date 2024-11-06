@@ -12,11 +12,12 @@ Provide the secrets your GitHub runner needs from 1Password.
 
 This Action is same as official
 [load-secrets-action](https://github.com/1Password/load-secrets-action), using
-1Password JavaScript [SDK](https://github.com/1Password/onepassword-sdk-js), to
-allow use in Windows, Linux, macOS
+1Password JavaScript [SDK](https://github.com/1Password/onepassword-sdk-js) and
+[connect API](https://developer.1password.com/docs/connect/connect-api-reference)
 
-This project only support
+This project support
 [1Password Service Account](https://developer.1password.com/docs/service-accounts/get-started)
+and [1Password Connect](https://developer.1password.com/docs/connect/).
 
 ## Usage
 
