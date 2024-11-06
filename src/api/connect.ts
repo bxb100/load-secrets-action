@@ -1,4 +1,4 @@
-import { Item, ResolveSecretReference, Vault } from './types'
+import { Item, ItemField, ResolveSecretReference, Vault } from './types'
 import { $Fetch, ofetch } from 'ofetch'
 import process from 'node:process'
 import { envConnectHost, envConnectToken } from '../constants'
@@ -36,44 +36,50 @@ export class Connect implements ResolveSecretReference {
         field_name: string
       }
 
-    const first_item = async <T = Vault | Item>(
-      res: Promise<T[]>,
-      predicate: (v: T) => boolean
-    ): Promise<T> => {
-      const items = (await res).filter(predicate)
-      if (items.length === 0) {
-        throw new Error('No items found')
+    const find_item = <T = Vault | Item | ItemField>(
+      items: Awaited<T[]>,
+      id_predicate: (v: T) => boolean,
+      name_predicate: (v: T) => boolean
+    ): T => {
+      const id_res = items.find(id_predicate)
+      if (id_res) {
+        return id_res
       }
-      return items[0]
+      const name_res = items.filter(name_predicate)
+      if (name_res.length > 1) {
+        throw new Error('Multiple items found')
+      } else if (name_res.length === 1) {
+        return name_res[0]
+      }
+      throw new Error('No items found')
     }
 
     // cache response may cause other potential security issues
-    const vault = await first_item(
-      this.api<Vault[]>('/v1/vaults'),
-      v => v.name === vault_name || v.id === vault_name
+    const vault = find_item(
+      await this.api<Vault[]>('/v1/vaults'),
+      v => v.id === vault_name,
+      v => v.name === vault_name
     )
-    const item = await first_item(
-      this.api<Item[]>(`/v1/vaults/${vault.id}/items`),
-      i => i.title === item_name || i.id === item_name
+    const item = find_item(
+      await this.api<Item[]>(`/v1/vaults/${vault.id}/items`),
+      i => i.id === item_name,
+      i => i.title === item_name
     )
     const item_detail = await this.api<Item>(
       `/v1/vaults/${vault.id}/items/${item.id}`
     )
-    let section_id: string | undefined
+    let item_fields = item_detail.fields
     if (section_name) {
       const section = item_detail.sections.filter(
         s => s.label === section_name || s.id === section_name
       )[0]
-      section_id = section.id
+      item_fields = item_fields.filter(f => f.section?.id === section.id)
     }
-    const field = item_detail.fields
-      .filter(f => {
-        if (section_id) {
-          return f.section?.id === section_id
-        }
-        return true
-      })
-      .filter(f => f.label === field_name || f.id === field_name)[0]
-    return field.value
+
+    return find_item(
+      item_fields,
+      f => f.id === field_name,
+      f => f.label === field_name
+    ).value
   }
 }
