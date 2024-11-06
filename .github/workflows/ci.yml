@@ -57,6 +57,10 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
 
+      - name: Setup Docker
+        if: ${{ matrix.platform == 'macos-latest' }}
+        run: brew install docker-compose
+
       - name: Setup Connect Server
         id: setup-connect-server
         if: ${{ matrix.type == 'connect' }}

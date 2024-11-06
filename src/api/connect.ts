@@ -1,7 +1,7 @@
 import { Item, ResolveSecretReference, Vault } from './types'
 import { $Fetch, ofetch } from 'ofetch'
 import process from 'node:process'
-import { envConnectHost, envServiceAccountToken } from '../constants'
+import { envConnectHost, envConnectToken } from '../constants'
 import assert from 'node:assert'
 
 export class Connect implements ResolveSecretReference {
@@ -13,15 +13,12 @@ export class Connect implements ResolveSecretReference {
 
   constructor() {
     assert(process.env[envConnectHost], `${envConnectHost} is required`)
-    assert(
-      process.env[envServiceAccountToken],
-      `${envServiceAccountToken} is required`
-    )
+    assert(process.env[envConnectToken], `${envConnectToken} is required`)
 
     this.api = ofetch.create({
       baseURL: `${process.env[envConnectHost]}`,
       headers: {
-        Authorization: `Bearer ${process.env[envServiceAccountToken]}`
+        Authorization: `Bearer ${process.env[envConnectToken]}`
       }
     })
   }

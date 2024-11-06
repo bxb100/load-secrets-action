@@ -26944,11 +26944,11 @@ class Connect {
     api;
     constructor() {
         (0, node_assert_1.default)(node_process_1.default.env[constants_1.envConnectHost], `${constants_1.envConnectHost} is required`);
-        (0, node_assert_1.default)(node_process_1.default.env[constants_1.envServiceAccountToken], `${constants_1.envServiceAccountToken} is required`);
+        (0, node_assert_1.default)(node_process_1.default.env[constants_1.envConnectToken], `${constants_1.envConnectToken} is required`);
         this.api = ofetch_1.ofetch.create({
             baseURL: `${node_process_1.default.env[constants_1.envConnectHost]}`,
             headers: {
-                Authorization: `Bearer ${node_process_1.default.env[constants_1.envServiceAccountToken]}`
+                Authorization: `Bearer ${node_process_1.default.env[constants_1.envConnectToken]}`
             }
         });
     }
