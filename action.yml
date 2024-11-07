@@ -1,4 +1,4 @@
-name: 'Load secrets from 1Password'
+name: 'Inject secrets from 1Password'
 description:
   'Make secrets from 1Password Connect available as environment variables in the
   next steps.'

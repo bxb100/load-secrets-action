@@ -10,10 +10,8 @@ import * as core from '@actions/core'
 import * as main from '../src/main'
 import * as op from '@1password/sdk'
 
-// Mock the action's main function
 const runMock = jest.spyOn(main, 'run')
 
-// Mock the GitHub Actions core library
 let errorMock: jest.SpiedFunction<typeof core.error>
 let infoMock: jest.SpiedFunction<typeof core.info>
 let outputMock: jest.SpiedFunction<typeof core.setOutput>

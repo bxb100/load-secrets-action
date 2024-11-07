@@ -26952,6 +26952,7 @@ class Connect {
             }
         });
     }
+    // It should same as `op inject` command, because the audit log showed as it is.
     async resolve(ref) {
         const match = Connect.REGEX.exec(ref);
         if (!match) {
