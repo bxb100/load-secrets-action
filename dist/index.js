@@ -26901,6 +26901,7 @@ const sdk_1 = __nccwpck_require__(7837);
 const node_process_1 = __importDefault(__nccwpck_require__(1708));
 const constants_1 = __nccwpck_require__(7242);
 const node_assert_1 = __importDefault(__nccwpck_require__(4589));
+const version_1 = __nccwpck_require__(311);
 class Account {
     token;
     constructor() {
@@ -26911,7 +26912,7 @@ class Account {
         return (0, sdk_1.createClient)({
             auth: this.token,
             integrationName: '1Password GitHub Action',
-            integrationVersion: 'v0.1.0'
+            integrationVersion: version_1.Version.version
         });
     }
     async resolve(ref) {
@@ -27040,8 +27041,8 @@ const core = __importStar(__nccwpck_require__(7484));
 const utils_1 = __nccwpck_require__(1798);
 async function run() {
     try {
-        const should_unset_previous = core.getBooleanInput('unset-previous');
-        const export_env = core.getBooleanInput('export-env');
+        const should_unset_previous = core.getBooleanInput('unset_previous');
+        const export_env = core.getBooleanInput('export_env');
         if (should_unset_previous) {
             (0, utils_1.unset_previous)();
         }
@@ -27114,8 +27115,7 @@ async function load_secrets(refs, export_env) {
             resolver = new connect_1.Connect();
         }
     }
-    catch (error) {
-        core.error(error);
+    catch {
         throw new Error(constants_1.authErr);
     }
     for (const [key, ref] of Object.entries(refs)) {
@@ -27143,6 +27143,18 @@ function unset_previous() {
         }
     }
 }
+
+
+/***/ }),
+
+/***/ 311:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Version = void 0;
+exports.Version = { version: '0.2.0' };
 
 
 /***/ }),

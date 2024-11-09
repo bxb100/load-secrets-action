@@ -62,9 +62,9 @@ describe('action', () => {
     // Set the action's inputs as return values from core.getInput()
     getInputMock.mockImplementation(name => {
       switch (name) {
-        case 'unset-previous':
+        case 'unset_previous':
           return true
-        case 'export-env':
+        case 'export_env':
           return false
         default:
           return false

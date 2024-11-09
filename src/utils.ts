@@ -29,8 +29,7 @@ export async function load_secrets(
     } else {
       resolver = new Connect()
     }
-  } catch (error) {
-    core.error(error as Error)
+  } catch {
     throw new Error(authErr)
   }
 

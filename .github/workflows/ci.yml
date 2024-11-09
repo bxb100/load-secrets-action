@@ -77,8 +77,8 @@ jobs:
         if: ${{ matrix.type == 'connect' }}
         uses: ./
         with:
-          unset-previous: 'true'
-          export-env: 'true'
+          unset_previous: 'true'
+          export_env: 'true'
         env:
           OP_CONNECT_HOST: 'http://localhost:8080'
           OP_CONNECT_TOKEN: ${{ secrets.OP_CONNECT_TOKEN }}
@@ -89,8 +89,8 @@ jobs:
         if: ${{ matrix.type == 'server' }}
         uses: ./
         with:
-          unset-previous: 'true'
-          export-env: 'true'
+          unset_previous: 'true'
+          export_env: 'true'
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           test: 'op://dev/GitHub Action Test/text'

@@ -3,6 +3,7 @@ import { Client, createClient } from '@1password/sdk'
 import process from 'node:process'
 import { envServiceAccountToken } from '../constants'
 import assert from 'node:assert'
+import { Version } from '../version'
 
 export class Account implements ResolveSecretReference {
   token: string
@@ -19,7 +20,7 @@ export class Account implements ResolveSecretReference {
     return createClient({
       auth: this.token,
       integrationName: '1Password GitHub Action',
-      integrationVersion: 'v0.1.0'
+      integrationVersion: Version.version
     })
   }
 

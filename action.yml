@@ -9,12 +9,12 @@ branding:
   color: blue
 
 inputs:
-  unset-previous:
+  unset_previous:
     description:
       Whether to unset environment variables populated by 1Password in earlier
       job steps
     default: 'false'
-  export-env:
+  export_env:
     description: Export the secrets as environment variables
     default: 'true'
 

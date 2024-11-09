@@ -1,7 +1,7 @@
 {
   "name": "typescript-action",
   "description": "GitHub Actions TypeScript template",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Lemon",
   "private": true,
   "homepage": "https://github.com/bxb100/load-secrets-action",
@@ -34,7 +34,8 @@
     "package": "npx ncc build src/index.ts -o dist --source-map --license licenses.txt",
     "package:watch": "npm run package -- --watch",
     "test": "npx jest",
-    "all": "npm run format:write && npm run lint && npm run test && npm run coverage && npm run package"
+    "all": "npm run version:output && npm run format:write && npm run lint && npm run test && npm run coverage && npm run package",
+    "version:output": "echo 'export const Version = { version: \"'$npm_package_version'\" }' > ./src/version.ts"
   },
   "license": "MIT",
   "jest": {

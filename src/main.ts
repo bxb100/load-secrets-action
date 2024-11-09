@@ -7,8 +7,8 @@ import {
 
 export async function run(): Promise<void> {
   try {
-    const should_unset_previous = core.getBooleanInput('unset-previous')
-    const export_env = core.getBooleanInput('export-env')
+    const should_unset_previous = core.getBooleanInput('unset_previous')
+    const export_env = core.getBooleanInput('export_env')
 
     if (should_unset_previous) {
       unset_previous()
