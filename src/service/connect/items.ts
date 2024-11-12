@@ -14,16 +14,17 @@ export async function get_vault_id(
     if (vaults.length === 0) {
       throw new Error(`No vaults found with identifier ${vault_identifier}`)
     }
+    let oldest_vault = vaults[0]
     if (vaults.length > 1) {
-      const oldest_vault = vaults.sort(
+      oldest_vault = vaults.sort(
         (a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0)
       )[0]
       core.info(
         `${vaults.length} 1Password vaults found with the title ${vault_identifier}. Will use vault ${oldest_vault.id} as it is the oldest.`
       )
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return oldest_vault.id!
     }
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    vault_identifier = oldest_vault.id!
   }
   return vault_identifier
 }
@@ -38,16 +39,17 @@ export async function get_item_id(
     if (items.length === 0) {
       throw new Error(`No items found with identifier ${item_identifier}`)
     }
+    let oldest_item = items[0]
     if (items.length > 1) {
-      const oldest_item = items.sort(
+      oldest_item = items.sort(
         (a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0)
       )[0]
       core.info(
         `${items.length} 1Password items found with the title ${item_identifier}. Will use item ${oldest_item.id} as it is the oldest.`
       )
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return oldest_item.id!
     }
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    item_identifier = oldest_item.id!
   }
   return item_identifier
 }

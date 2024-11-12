@@ -1,7 +1,7 @@
 {
   "name": "typescript-action",
   "description": "GitHub Actions TypeScript template",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "author": "Lemon",
   "private": true,
   "homepage": "https://github.com/bxb100/load-secrets-action",

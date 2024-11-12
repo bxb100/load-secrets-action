@@ -35426,12 +35426,13 @@ async function get_vault_id(client, vault_identifier) {
         if (vaults.length === 0) {
             throw new Error(`No vaults found with identifier ${vault_identifier}`);
         }
+        let oldest_vault = vaults[0];
         if (vaults.length > 1) {
-            const oldest_vault = vaults.sort((a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0))[0];
+            oldest_vault = vaults.sort((a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0))[0];
             core.info(`${vaults.length} 1Password vaults found with the title ${vault_identifier}. Will use vault ${oldest_vault.id} as it is the oldest.`);
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            return oldest_vault.id;
         }
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        vault_identifier = oldest_vault.id;
     }
     return vault_identifier;
 }
@@ -35441,12 +35442,13 @@ async function get_item_id(client, item_identifier, vault_id) {
         if (items.length === 0) {
             throw new Error(`No items found with identifier ${item_identifier}`);
         }
+        let oldest_item = items[0];
         if (items.length > 1) {
-            const oldest_item = items.sort((a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0))[0];
+            oldest_item = items.sort((a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0))[0];
             core.info(`${items.length} 1Password items found with the title ${item_identifier}. Will use item ${oldest_item.id} as it is the oldest.`);
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            return oldest_item.id;
         }
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        item_identifier = oldest_item.id;
     }
     return item_identifier;
 }
@@ -35488,13 +35490,10 @@ exports.is_valid_client_uuid = is_valid_client_uuid;
 /**
  * https://github.com/1Password/onepassword-operator/blob/ced45c33d4c1e0267dc5af54231c5a29accce4c4/pkg/onepassword/uuid.go#L7
  *
- * @param uuid check this is a valid client uuid or title
+ * @param uuid check this is a valid client uuid, otherwise is title
  */
 function is_valid_client_uuid(uuid) {
-    if (uuid.length != 26) {
-        return false;
-    }
-    const regex = /[a-z0-9]+/;
+    const regex = /[a-z0-9]{26}/;
     return regex.test(uuid);
 }
 
@@ -35592,7 +35591,7 @@ function unset_previous() {
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Version = void 0;
-exports.Version = { version: '0.2.0' };
+exports.Version = { version: '0.2.2' };
 
 
 /***/ }),
