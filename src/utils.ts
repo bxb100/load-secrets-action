@@ -5,9 +5,9 @@ import {
   ENV_MANAGED_VARIABLES,
   envServiceAccountToken
 } from './constants'
-import { ResolveSecretReference } from './api/types'
-import { Account } from './api/account'
-import { Connect } from './api/connect'
+import { ResolveSecretReference } from './service/types'
+import { Account } from './service/account'
+import { Connect } from './service/connect'
 
 export function load_secret_refs_from_env(): Record<string, string> {
   // secret references `op://<vault-name>/<item-name>/[section-name/]<field-name>`

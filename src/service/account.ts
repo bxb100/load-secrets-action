@@ -6,7 +6,8 @@ import assert from 'node:assert'
 import { Version } from '../version'
 
 export class Account implements ResolveSecretReference {
-  token: string
+  private readonly token: string
+  private client?: Client
 
   constructor() {
     assert(
@@ -17,11 +18,14 @@ export class Account implements ResolveSecretReference {
   }
 
   async init(): Promise<Client> {
-    return createClient({
-      auth: this.token,
-      integrationName: '1Password GitHub Action',
-      integrationVersion: Version.version
-    })
+    if (!this.client) {
+      this.client = await createClient({
+        auth: this.token,
+        integrationName: '1Password GitHub Action',
+        integrationVersion: Version.version
+      })
+    }
+    return this.client
   }
 
   async resolve(ref: string): Promise<string> {
